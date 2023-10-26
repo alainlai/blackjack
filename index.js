@@ -1,4 +1,14 @@
-//
+// Create the player object
+
+let player = {
+    name : "Alain", 
+    chips : 0,
+    updateChips: function(Int) {
+        chips += Int
+    }
+}
+
+// Set up variables
 let cards = []
 let sum = 0
 let haveBlackJack = false
@@ -7,6 +17,8 @@ let message = ""
 let messageEl = document.getElementById("message-el")
 let sumEl = document.querySelector("#sum-el")
 let cardsEl = document.getElementById("cards-el")
+let playerEl = document.getElementById("player-el")
+playerEl.textContent = player.name + " " + player.chips
 
 function getRandomCard() {
     let randomNumber = Math.floor(Math.random() * 13) + 1
@@ -21,6 +33,7 @@ function getRandomCard() {
 
 function startGame() {
     isAlive = true
+    haveBlackJack = false
     let firstCard = getRandomCard()
     let secondCard = getRandomCard()
     cards = [firstCard,secondCard]
@@ -41,20 +54,26 @@ function renderGame() {
     } else if (sum === 21) {
         haveBlackJack = true
         message = "You have blackjack"
+        player.chips = player.chips + 10
+        playerEl.textContent = player.chips
     } else {
         isAlive = false       
         message = "You have lost"
+        player.chips = player.chips - 10
+        playerEl.textContent = player.chips
     }
     messageEl.textContent = message
 }
 
 function newCard() {
-    message = "Drawing a new card"
-    messageEl.textContent = message
-    card = getRandomCard()
-    
-    sum = sum + card
-    cards.push(card)
-    
-    renderGame()
+    if (isAlive == true && !haveBlackJack) {
+        message = "Drawing a new card"
+        messageEl.textContent = message
+        card = getRandomCard()
+        
+        sum = sum + card
+        cards.push(card)
+        
+        renderGame()
+    }
 }
